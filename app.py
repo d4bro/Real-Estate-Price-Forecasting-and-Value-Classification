@@ -35,6 +35,9 @@ with st.sidebar:
         'ocean_proximity',
         sorted(df["ocean_proximity"].dropna().unique())
     )
+    x_axis = st.selectbox("X axis", numeric_columns, index=0)
+    y_axis = st.selectbox("Y axis", numeric_columns, index=3)
+    color_by = st.selectbox("color by", numeric_columns)
     age_range = st.slider(
         'housing_median_age',
         min_value=1, max_value=52, value=(10, 35)
@@ -55,8 +58,8 @@ with st.sidebar:
         "Choose Model",
         ["Regression: Random Forest", "Gradient Boosting", "Classification: Random Forest"]
     )
-n_estimators = st.sidebar.number_input("Number of Trees (50-500)", min_value=50, max_value=500, value=100, step=25)
-max_depth = st.sidebar.slider("Maximum Depth", 1, 20, 5)
+    n_estimators = st.number_input("Number of Trees (50-500)", min_value=50, max_value=500, value=100, step=25)
+    max_depth = st.slider("Maximum Depth", 1, 20, 5)
     
 # Data Filtering
 if age_range:
@@ -67,6 +70,9 @@ if latitude_range:
     df = df[(df['latitude'] >= latitude_range[0]) & (df['latitude'] <= latitude_range[1])]
 if longitude_range:
     df = df[(df['longitude'] >= longitude_range[0]) & (df['longitude'] <= longitude_range[1])]
+if x_axis and y_axis:
+    fig = px.scatter(df, x=x_axis, y=y_axis, color=color_by, trendline="ols")
+    st.plotly_chart(fig)
 
 # Visualize Data
 fig = px.scatter_mapbox(
@@ -153,7 +159,7 @@ if model_type in ["Regression: Random Forest", "Gradient Boosting"]:
 
 # Classification Example
 if model_type == "Classification: Random Forest":
-    y_class = pd.cut(y, bins=[0, 150000, 300000, 500000, np.inf], labels=[0, 1, 2, 3]) 
+    y_class = pd.cut(y, bins=[0, 150000, 300000, 500000, np.inf], labels=[0, 1, 2, 3])  # Example binning
     X_train_c, X_test_c, y_train_c, y_test_c = train_test_split(X, y_class, test_size=0.2, random_state=42)
 
     clf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
