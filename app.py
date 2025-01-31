@@ -82,7 +82,7 @@ fig = px.scatter_mapbox(
 st.plotly_chart(fig, use_container_width=True)
 
 # Plot the heatmap
-st.write("Plot the heatmap")
+st.subheader('Correlation Matrix Analysis for Landscape Properties')
 fig, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
 ax.set_title('Correlation Matrix')
