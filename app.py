@@ -153,7 +153,7 @@ if model_type in ["Regression: Random Forest", "Gradient Boosting"]:
 
 # Classification Example
 if model_type == "Classification: Random Forest":
-    y_class = pd.cut(y, bins=[0, 150000, 300000, 500000, np.inf], labels=[0, 1, 2, 3])  # Example binning
+    y_class = pd.cut(y, bins=[0, 150000, 300000, 500000, np.inf], labels=[0, 1, 2, 3]) 
     X_train_c, X_test_c, y_train_c, y_test_c = train_test_split(X, y_class, test_size=0.2, random_state=42)
 
     clf = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, random_state=42)
